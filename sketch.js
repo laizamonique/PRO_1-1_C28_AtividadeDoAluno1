@@ -3,6 +3,10 @@ const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 var engine, world, backgroundImg;
+waterSound,
+pirateLaughSound,
+backgroundMusic
+cannonExplosion;
 var canvas, angle, tower, ground, cannon, boat;
 var balls = [];
 var boats = [];
@@ -17,6 +21,7 @@ var waterSplashAnimation = [];
 var waterSplashSpritedata, waterSplashSpritesheet;
 
 var isGameOver = false;
+var isLaughing = false;
 
 function preload() {
   backgroundImg = loadImage("./assets/background.gif");
@@ -134,7 +139,8 @@ function showCannonBalls(ball, index) {
     ball.display();
     ball.animate();
     if (ball.body.position.x >= width || ball.body.position.y >= height - 50) {
-        ball.remove(index);
+     waterSound.play()
+      ball.remove(index);
       
     }
   }
@@ -170,6 +176,11 @@ function showBoats() {
       boats[i].animate();
       var collision = Matter.SAT.collides(this.tower, boats[i].body);
       if (collision.collided && !boats[i].isBroken) {
+        if(!isLaughing && !pirateLaughSound.isPLaying()){
+pirateLaughSound.play();
+isLaughing = true
+}
+
         isGameOver = true;
         gameOver();
       }
